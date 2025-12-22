@@ -8,7 +8,7 @@ include_once __DIR__ . '/../config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Perpustakaan Digital</title>
+    <title>Library Husain</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@ include_once __DIR__ . '/../config.php';
 
 <nav class="navbar">
     <a href="#" class="brand">
-        <i class="fas fa-book-reader"></i> LibraDTS
+        <i class="fas fa-book-reader"></i> Library Husain
     </a>
     
     <div class="nav-links">
