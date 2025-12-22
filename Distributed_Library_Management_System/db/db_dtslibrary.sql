@@ -98,18 +98,20 @@ CREATE TABLE `tbl_member` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL DEFAULT '123456',
   `alamat` text DEFAULT NULL,
-  `nomor_telepon` varchar(15) DEFAULT NULL
+  `nomor_telepon` varchar(15) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `tgl_lahir` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_member`
 --
 
-INSERT INTO `tbl_member` (`id_member`, `nama_lengkap`, `username`, `alamat`, `nomor_telepon`) VALUES
-(1, 'Danendra', 'Danen', 'JL.gunung gede', '085812345678'),
-(2, 'Dika Danendra', 'Dika', 'jepang', '085812345698'),
-(3, 'ken', 'Ken', 'bogor', '085812345698'),
-(4, 'Danendra', 'admin', 'bogor', '085812345698');
+INSERT INTO `tbl_member` (`id_member`, `nama_lengkap`, `username`, `alamat`, `nomor_telepon`, `email`, `tgl_lahir`) VALUES
+(1, 'Danendra', 'Danen', 'JL.gunung gede', '085812345678', 'danen@gmail.com', '2000-01-01'),
+(2, 'Dika Danendra', 'Dika', 'jepang', '085812345698', 'dika@gmail.com', '2001-05-20'),
+(3, 'ken', 'Ken', 'bogor', '085812345698', 'ken@gmail.com', '1999-12-12'),
+(4, 'Danendra', 'admin', 'bogor', '085812345698', 'admin@dts.com', '1995-08-17');
 
 -- --------------------------------------------------------
 
@@ -203,7 +205,8 @@ ALTER TABLE `tbl_buku`
 -- Indexes for table `tbl_denda`
 --
 ALTER TABLE `tbl_denda`
-  ADD PRIMARY KEY (`id_denda`);
+  ADD PRIMARY KEY (`id_denda`),
+  ADD KEY `fk_denda_pinjam` (`pinjam_id`);
 
 --
 -- Indexes for table `tbl_kategori`
@@ -229,6 +232,7 @@ ALTER TABLE `tbl_petugas`
 --
 ALTER TABLE `tbl_pinjam`
   ADD PRIMARY KEY (`id_pinjam`),
+  ADD UNIQUE KEY `pinjam_id_unique` (`pinjam_id`),
   ADD KEY `fk_pinjam_member` (`id_member`),
   ADD KEY `fk_pinjam_buku` (`id_buku`);
 
@@ -264,6 +268,12 @@ ALTER TABLE `tbl_pinjam`
 --
 ALTER TABLE `tbl_buku`
   ADD CONSTRAINT `fk_buku_kategori` FOREIGN KEY (`id_kategori`) REFERENCES `tbl_kategori` (`id_kategori`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tbl_denda`
+--
+ALTER TABLE `tbl_denda`
+  ADD CONSTRAINT `fk_denda_pinjam` FOREIGN KEY (`pinjam_id`) REFERENCES `tbl_pinjam` (`pinjam_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_pinjam`
