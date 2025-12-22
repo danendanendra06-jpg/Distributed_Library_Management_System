@@ -26,11 +26,15 @@ if (!isset($_SESSION['user_role']) || ($_SESSION['user_role'] !== 'Petugas' && $
 <script>
 let memberMap = {};
 async function loadData() {
-    const [dendaList, loans, members] = await Promise.all([
+    const [dendaListData, loansData, membersData] = await Promise.all([
         fetchAPI('/denda'),
         fetchAPI('/pinjam'),
         fetchAPI('/member')
     ]);
+    
+    const dendaList = dendaListData || [];
+    const loans = loansData || [];
+    const members = membersData || [];
     
     // Create optimized map for PINJAM ID -> Member ID
     let loanMemberMap = {};

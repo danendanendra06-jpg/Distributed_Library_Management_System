@@ -43,7 +43,7 @@ if (!isset($_SESSION['user_role']) || ($_SESSION['user_role'] !== 'Petugas' && $
 
 <script>
 async function loadData() {
-    const list = await fetchAPI('/kategori');
+    const list = await fetchAPI('/kategori') || [];
     const tbody = document.querySelector('#table-kategori tbody');
     tbody.innerHTML = '';
     list.forEach(item => {

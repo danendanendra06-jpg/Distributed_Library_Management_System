@@ -85,7 +85,7 @@ let categoriesMap = {};
 
 async function loadData() {
     // Fetch Categories first for mapping
-    const categories = await fetchAPI('/kategori');
+    const categories = await fetchAPI('/kategori') || [];
     const select = document.getElementById('idKategori');
     select.innerHTML = '';
     categories.forEach(c => {
@@ -97,7 +97,7 @@ async function loadData() {
     });
 
     // Fetch Books
-    const books = await fetchAPI('/buku');
+    const books = await fetchAPI('/buku') || [];
     const tbody = document.querySelector('#table-buku tbody');
     tbody.innerHTML = '';
     

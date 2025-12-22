@@ -18,7 +18,11 @@ include_once __DIR__ . '/../config.php';
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/Project4_DTS/php/assets/css/style.css">
+    
+    <!-- Global Helper Scripts (Must be in head to be available for inline scripts) -->
+    <script src="/Project4_DTS/php/assets/js/script.js"></script>
 </head>
 <body>
 

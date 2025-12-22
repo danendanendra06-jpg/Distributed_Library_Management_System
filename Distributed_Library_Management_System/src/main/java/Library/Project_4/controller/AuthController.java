@@ -27,7 +27,8 @@ public class AuthController {
 
         // Check if Admin (Petugas)
         Petugas petugas = petugasRepository.findByUser(request.getUsername());
-        if (petugas != null && petugas.getPass().equals(request.getPassword())) {
+        // Hash input password with MD5 before comparing
+        if (petugas != null && petugas.getPass().equals(getMd5(request.getPassword()))) {
             response.put("status", "success");
             response.put("role", "Petugas");
             response.put("user", petugas);
@@ -60,6 +61,22 @@ public class AuthController {
         return memberRepository.save(member);
     }
 
+    // Helper MD5
+    public static String getMd5(String input) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            java.math.BigInteger no = new java.math.BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // DTO Inner Class
     public static class LoginRequest {
         private String username;
@@ -80,5 +97,6 @@ public class AuthController {
         public void setPassword(String password) {
             this.password = password;
         }
+
     }
 }

@@ -65,7 +65,7 @@ if (!isset($_SESSION['user_role']) || ($_SESSION['user_role'] !== 'Petugas' && $
 
 <script>
 async function loadData() {
-    const list = await fetchAPI('/petugas');
+    const list = await fetchAPI('/petugas') || [];
     const tbody = document.querySelector('#table-petugas tbody');
     tbody.innerHTML = '';
     list.forEach(p => {
@@ -84,55 +84,68 @@ async function loadData() {
         tbody.appendChild(tr);
     });
 }
-function openModal() {
-    document.getElementById('modalForm').style.display = 'flex';
-    document.getElementById('formPetugas').reset();
-    document.getElementById('idPetugas').value = '';
-    document.getElementById('idPetugas').readOnly = false;
-    document.getElementById('isEdit').value = 'false';
-    document.getElementById('modalTitle').textContent = 'Tambah Petugas';
-}
-function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
-window.edit = function(p) {
-    openModal();
-    document.getElementById('modalTitle').textContent = 'Edit Petugas';
-    document.getElementById('isEdit').value = 'true';
-    document.getElementById('idPetugas').value = p.idPetugas;
-    document.getElementById('idPetugas').readOnly = true;
-    document.getElementById('nama').value = p.nama;
-    document.getElementById('user').value = p.user;
-    document.getElementById('pass').value = p.pass;
-    document.getElementById('email').value = p.email;
-    document.getElementById('telepon').value = p.telepon;
-}
-async function del(id) {
-    if(confirm('Hapus petugas?')) {
-        await fetchAPI(`/petugas/${id}`, 'DELETE');
-        loadData();
+    function openModal() {
+        document.getElementById('modalForm').style.display = 'flex';
+        document.getElementById('formPetugas').reset();
+        document.getElementById('idPetugas').value = '';
+        document.getElementById('idPetugas').readOnly = false;
+        document.getElementById('isEdit').value = 'false';
+        document.getElementById('modalTitle').textContent = 'Tambah Petugas';
+        document.getElementById('pass').required = true;
+        document.getElementById('pass').placeholder = '';
     }
-}
-document.getElementById('formPetugas').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const isEdit = document.getElementById('isEdit').value === 'true';
-    const id = document.getElementById('idPetugas').value;
-    
-    const url = isEdit ? `/petugas/${id}` : '/petugas';
-    const method = isEdit ? 'PUT' : 'POST';
-    
-    const data = {
-        idPetugas: id,
-        nama: document.getElementById('nama').value,
-        user: document.getElementById('user').value,
-        pass: document.getElementById('pass').value,
-        email: document.getElementById('email').value,
-        telepon: document.getElementById('telepon').value,
-        // Defaults
-        tempatLahir: '-', tglLahir: '-', alamat: '-', tglBergabung: '-', foto: '-'
-    };
-    await fetchAPI(url, method, data);
-    closeModal();
+    function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
+    window.edit = function(p) {
+        openModal();
+        document.getElementById('modalTitle').textContent = 'Edit Petugas';
+        document.getElementById('isEdit').value = 'true';
+        document.getElementById('idPetugas').value = p.idPetugas;
+        document.getElementById('idPetugas').readOnly = true;
+        document.getElementById('nama').value = p.nama;
+        document.getElementById('user').value = p.user;
+        // Don't fill password
+        document.getElementById('pass').value = '';
+        document.getElementById('pass').required = false;
+        document.getElementById('pass').placeholder = 'Kosongkan jika tidak ubah';
+        document.getElementById('email').value = p.email;
+        document.getElementById('telepon').value = p.telepon;
+    }
+    async function del(id) {
+        if(confirm('Hapus petugas?')) {
+            await fetchAPI(`/petugas/${id}`, 'DELETE');
+            loadData();
+        }
+    }
+    document.getElementById('formPetugas').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const isEdit = document.getElementById('isEdit').value === 'true';
+        const id = document.getElementById('idPetugas').value;
+        const passVal = document.getElementById('pass').value;
+        
+        const url = isEdit ? `/petugas/${id}` : '/petugas';
+        const method = isEdit ? 'PUT' : 'POST';
+        
+        const data = {
+            idPetugas: id,
+            nama: document.getElementById('nama').value,
+            user: document.getElementById('user').value,
+            email: document.getElementById('email').value,
+            telepon: document.getElementById('telepon').value,
+            // Defaults
+            tempatLahir: '-', tglLahir: '-', alamat: '-', tglBergabung: '-', foto: '-'
+        };
+        // Only send password if not empty
+        if (passVal) {
+            data.pass = passVal;
+        } else if (!isEdit) {
+            alert("Password wajib diisi untuk data baru");
+            return;
+        }
+
+        await fetchAPI(url, method, data);
+        closeModal();
+        loadData();
+    });
     loadData();
-});
-loadData();
-</script>
+    </script>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

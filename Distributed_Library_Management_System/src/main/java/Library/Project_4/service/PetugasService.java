@@ -25,6 +25,9 @@ public class PetugasService {
     }
 
     public Petugas save(Petugas petugas) {
+        // Hash password if not already hashed (simple heuristic or always hash)
+        // Assuming implementation always sends raw password
+        petugas.setPass(getMd5(petugas.getPass()));
         return repository.save(petugas);
     }
 
@@ -32,9 +35,13 @@ public class PetugasService {
         Optional<Petugas> existing = repository.findById(id);
         if (existing.isPresent()) {
             Petugas data = existing.get();
-            // ID (Pk) usually not updated
             data.setUser(newData.getUser());
-            data.setPass(newData.getPass());
+
+            // Only update password if provided and not empty
+            if (newData.getPass() != null && !newData.getPass().isEmpty()) {
+                data.setPass(getMd5(newData.getPass()));
+            }
+
             data.setNama(newData.getNama());
             data.setTempatLahir(newData.getTempatLahir());
             data.setTglLahir(newData.getTglLahir());
@@ -46,6 +53,21 @@ public class PetugasService {
             return repository.save(data);
         }
         return null;
+    }
+
+    private String getMd5(String input) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            java.math.BigInteger no = new java.math.BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void delete(String id) {

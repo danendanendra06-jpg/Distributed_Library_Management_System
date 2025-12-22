@@ -29,7 +29,7 @@ if (!isset($_SESSION['user_role']) || ($_SESSION['user_role'] !== 'Petugas' && $
 
 <script>
 async function loadData() {
-    const members = await fetchAPI('/member');
+    const members = await fetchAPI('/member') || [];
     const tbody = document.querySelector('#table-member tbody');
     tbody.innerHTML = '';
     

@@ -38,11 +38,15 @@ let bukuMap = {};
 
 async function loadData() {
     // Fetch dependencies
-    const [members, bukus, loans] = await Promise.all([
+    const [membersData, bukusData, loansData] = await Promise.all([
         fetchAPI('/member'),
         fetchAPI('/buku'),
         fetchAPI('/pinjam')
     ]);
+    
+    const members = membersData || [];
+    const bukus = bukusData || [];
+    const loans = loansData || [];
 
     members.forEach(m => memberMap[m.idMember] = m.namaLengkap);
     bukus.forEach(b => bukuMap[b.idBuku] = b.judul);

@@ -13,35 +13,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `projek_perpus`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_biaya_denda`
---
-
-CREATE TABLE `tbl_biaya_denda` (
-  `id_biaya_denda` int(11) NOT NULL,
-  `harga_denda` varchar(255) NOT NULL,
-  `stat` varchar(255) NOT NULL,
-  `tgl_tetap` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_biaya_denda`
---
-
-INSERT INTO `tbl_biaya_denda` (`id_biaya_denda`, `harga_denda`, `stat`, `tgl_tetap`) VALUES
-(1, '4000', 'Aktif', '2019-11-23');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_buku`
---
 
 CREATE TABLE `tbl_buku` (
   `id_buku` int(11) NOT NULL,
@@ -202,7 +173,7 @@ INSERT INTO `tbl_pinjam` (`id_pinjam`, `pinjam_id`, `id_member`, `id_buku`, `sta
 --
 DELIMITER $$
 CREATE TRIGGER `tr_denda_otomatis` AFTER UPDATE ON `tbl_pinjam` FOR EACH ROW BEGIN
-    SET @harga_denda_per_hari = (SELECT harga_denda FROM tbl_biaya_denda WHERE stat = 'Aktif' LIMIT 1);
+    SET @harga_denda_per_hari = 4000;
     
     IF NEW.status = 'Dikembalikan' AND NEW.tgl_kembali > NEW.tgl_balik THEN
         SET @lama_denda = DATEDIFF(NEW.tgl_kembali, NEW.tgl_balik);
@@ -219,11 +190,7 @@ DELIMITER ;
 -- Indexes for dumped tables
 --
 
---
--- Indexes for table `tbl_biaya_denda`
---
-ALTER TABLE `tbl_biaya_denda`
-  ADD PRIMARY KEY (`id_biaya_denda`);
+
 
 --
 -- Indexes for table `tbl_buku`
@@ -269,8 +236,7 @@ ALTER TABLE `tbl_pinjam`
 -- AUTO_INCREMENT for dumped tables
 --
 
-ALTER TABLE `tbl_biaya_denda`
-  MODIFY `id_biaya_denda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 
 ALTER TABLE `tbl_buku`
   MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
