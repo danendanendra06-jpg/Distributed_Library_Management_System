@@ -44,9 +44,14 @@ async function fetchAPI(endpoint, method = 'GET', data = null) {
         method: method,
         headers: {
             'Content-Type': 'application/json',
-            // Add JWT token here if you implement it
+            // Add JWT token if available
         }
     };
+
+    // Inject Token
+    if (typeof USER_TOKEN !== 'undefined' && USER_TOKEN) {
+        options.headers['Authorization'] = 'Bearer ' + USER_TOKEN;
+    }
 
     if (data) {
         options.body = JSON.stringify(data);

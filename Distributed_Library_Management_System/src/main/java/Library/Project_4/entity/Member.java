@@ -26,6 +26,12 @@ public class Member {
     @Column(name = "nomor_telepon")
     private String nomorTelepon;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "tgl_lahir")
+    private String tglLahir;
+
     // Constructor, Getter, Setter
     public Member() {
     }
@@ -76,5 +82,21 @@ public class Member {
 
     public void setNomorTelepon(String nomorTelepon) {
         this.nomorTelepon = nomorTelepon;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTglLahir() {
+        return tglLahir;
+    }
+
+    public void setTglLahir(String tglLahir) {
+        this.tglLahir = tglLahir;
     }
 }

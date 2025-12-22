@@ -27,12 +27,14 @@ public class AuthController {
 
         // Check if Admin (Petugas)
         Petugas petugas = petugasRepository.findByUser(request.getUsername());
-        // Hash input password with MD5 before comparing
         if (petugas != null && petugas.getPass().equals(getMd5(request.getPassword()))) {
             response.put("status", "success");
             response.put("role", "Petugas");
             response.put("user", petugas);
-            response.put("token", "dummy-token-petugas-" + petugas.getIdPetugas()); // In real app use JWT
+            // Generate Real Token
+            String token = Library.Project_4.security.JwtUtil.generateToken("Petugas", petugas.getIdPetugas(),
+                    petugas.getUser());
+            response.put("token", token);
             return response;
         }
 
@@ -42,7 +44,10 @@ public class AuthController {
             response.put("status", "success");
             response.put("role", "Member");
             response.put("user", member);
-            response.put("token", "dummy-token-member-" + member.getIdMember());
+            // Generate Real Token
+            String token = Library.Project_4.security.JwtUtil.generateToken("Member", member.getIdMember().toString(),
+                    member.getUsername());
+            response.put("token", token);
             return response;
         }
 

@@ -22,6 +22,9 @@ include_once __DIR__ . '/../config.php';
     <link rel="stylesheet" href="/Project4_DTS/php/assets/css/style.css">
     
     <!-- Global Helper Scripts (Must be in head to be available for inline scripts) -->
+    <script>
+        window.USER_TOKEN = '<?php echo isset($_SESSION['user_token']) ? $_SESSION['user_token'] : ""; ?>';
+    </script>
     <script src="/Project4_DTS/php/assets/js/script.js"></script>
 </head>
 <body>
@@ -47,6 +50,7 @@ include_once __DIR__ . '/../config.php';
                 <a href="/Project4_DTS/php/member/index.php" class="nav-link">Home</a>
                 <a href="/Project4_DTS/php/member/buku.php" class="nav-link">Katalog</a>
                 <a href="/Project4_DTS/php/member/riwayat.php" class="nav-link">Riwayat</a>
+                <a href="/Project4_DTS/php/member/profil.php" class="nav-link">Profil</a>
             <?php endif; ?>
             
             <a href="/Project4_DTS/php/auth/logout.php" class="btn btn-danger btn-sm">Logout (<?php echo $_SESSION['user_name'] ?? 'User'; ?>)</a>
