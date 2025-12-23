@@ -59,6 +59,15 @@ async function fetchAPI(endpoint, method = 'GET', data = null) {
 
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+
+        if (response.status === 401 || response.status === 403) {
+            showAlert('Sesi Anda telah habis. Silakan login kembali.', 'danger');
+            setTimeout(() => {
+                window.location.href = '/Project4_DTS/php/auth/logout.php';
+            }, 1000);
+            return null;
+        }
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
