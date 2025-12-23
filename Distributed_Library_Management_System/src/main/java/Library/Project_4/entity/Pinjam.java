@@ -12,10 +12,6 @@ import jakarta.persistence.Table;
 public class Pinjam {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_pinjam")
-    private Integer idPinjam;
-
     @Column(name = "pinjam_id")
     private String pinjamId;
 
@@ -41,13 +37,6 @@ public class Pinjam {
     private String tglKembali;
 
     // Getters and Setters
-    public Integer getIdPinjam() {
-        return idPinjam;
-    }
-
-    public void setIdPinjam(Integer idPinjam) {
-        this.idPinjam = idPinjam;
-    }
 
     public String getPinjamId() {
         return pinjamId;

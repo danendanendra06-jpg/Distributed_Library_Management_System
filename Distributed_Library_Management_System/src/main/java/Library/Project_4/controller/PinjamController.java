@@ -22,7 +22,7 @@ public class PinjamController {
     }
 
     @GetMapping("/{id}")
-    public Pinjam get(@PathVariable Integer id) {
+    public Pinjam get(@PathVariable String id) {
         return service.findById(id);
     }
 
@@ -32,12 +32,12 @@ public class PinjamController {
     }
 
     @PutMapping("/{id}")
-    public Pinjam update(@PathVariable Integer id, @RequestBody Pinjam pinjam) {
+    public Pinjam update(@PathVariable String id, @RequestBody Pinjam pinjam) {
         return service.update(id, pinjam);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable String id) {
         service.delete(id);
     }
 }

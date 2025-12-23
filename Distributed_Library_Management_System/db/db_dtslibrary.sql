@@ -150,7 +150,6 @@ INSERT INTO `tbl_petugas` (`id_petugas`, `user`, `pass`, `nama`, `tempat_lahir`,
 --
 
 CREATE TABLE `tbl_pinjam` (
-  `id_pinjam` int(11) NOT NULL,
   `pinjam_id` varchar(255) NOT NULL,
   `id_member` int(11) DEFAULT NULL,
   `id_buku` int(11) NOT NULL,
@@ -165,10 +164,10 @@ CREATE TABLE `tbl_pinjam` (
 -- Dumping data for table `tbl_pinjam`
 --
 
-INSERT INTO `tbl_pinjam` (`id_pinjam`, `pinjam_id`, `id_member`, `id_buku`, `status`, `tgl_pinjam`, `lama_pinjam`, `tgl_balik`, `tgl_kembali`) VALUES
-(16, 'PJ391', 1, 12, 'Dikembalikan', '2025-10-19', 7, '2025-10-26', '2025-11-08'),
-(17, 'PJ555', 2, 11, 'Dikembalikan', '2025-10-19', 1, '2025-10-20', '2025-10-25'),
-(18, 'PJ697', 1, 12, 'Dikembalikan', '2025-10-25', 5, '2025-10-30', '2025-11-08');
+INSERT INTO `tbl_pinjam` (`pinjam_id`, `id_member`, `id_buku`, `status`, `tgl_pinjam`, `lama_pinjam`, `tgl_balik`, `tgl_kembali`) VALUES
+('PJ391', 1, 12, 'Dikembalikan', '2025-10-19', 7, '2025-10-26', '2025-11-08'),
+('PJ555', 2, 11, 'Dikembalikan', '2025-10-19', 1, '2025-10-20', '2025-10-25'),
+('PJ697', 1, 12, 'Dikembalikan', '2025-10-25', 5, '2025-10-30', '2025-11-08');
 
 --
 -- Triggers `tbl_pinjam`
@@ -231,8 +230,7 @@ ALTER TABLE `tbl_petugas`
 -- Indexes for table `tbl_pinjam`
 --
 ALTER TABLE `tbl_pinjam`
-  ADD PRIMARY KEY (`id_pinjam`),
-  ADD UNIQUE KEY `pinjam_id_unique` (`pinjam_id`),
+  ADD PRIMARY KEY (`pinjam_id`),
   ADD KEY `fk_pinjam_member` (`id_member`),
   ADD KEY `fk_pinjam_buku` (`id_buku`);
 
@@ -254,10 +252,9 @@ ALTER TABLE `tbl_kategori`
 ALTER TABLE `tbl_member`
   MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
-
-
-ALTER TABLE `tbl_pinjam`
-  MODIFY `id_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+--
+-- Constraints for dumped tables
+--
 
 --
 -- Constraints for dumped tables

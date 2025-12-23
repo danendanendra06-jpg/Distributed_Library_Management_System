@@ -67,21 +67,20 @@ async function loadData() {
             <td>${p.tglKembali || '-'}</td>
             <td><span class="btn btn-sm ${isActive ? 'btn-secondary' : 'btn-outline'}">${p.status}</span></td>
             <td>
-                ${isActive ? `<button class="btn btn-primary btn-sm" onclick="returnBook(${p.idPinjam}, '${p.pinjamId}', ${p.idMember}, ${p.idBuku}, '${p.tglPinjam}', '${p.tglBalik}', ${p.lamaPinjam})">Kembalikan</button>` : 'Selesai'}
+                ${isActive ? `<button class="btn btn-primary btn-sm" onclick="returnBook('${p.pinjamId}', ${p.idMember}, ${p.idBuku}, '${p.tglPinjam}', '${p.tglBalik}', ${p.lamaPinjam})">Kembalikan</button>` : 'Selesai'}
             </td>
         `;
         tbody.appendChild(tr);
     });
 }
 
-async function returnBook(id, pinjamId, idMember, idBuku, tglPinjam, tglBalik, lamaPinjam) {
+async function returnBook(pinjamId, idMember, idBuku, tglPinjam, tglBalik, lamaPinjam) {
     if(!confirm('Proses pengembalian buku?')) return;
     
     // We update the status and tglKembali
     const today = new Date().toISOString().slice(0, 10);
     
     const data = {
-        idPinjam: id,
         pinjamId: pinjamId,
         idMember: idMember,
         idBuku: idBuku,
@@ -92,7 +91,7 @@ async function returnBook(id, pinjamId, idMember, idBuku, tglPinjam, tglBalik, l
         lamaPinjam: lamaPinjam
     };
     
-    await fetchAPI(`/pinjam/${id}`, 'PUT', data);
+    await fetchAPI(`/pinjam/${pinjamId}`, 'PUT', data);
     loadData();
 }
 
