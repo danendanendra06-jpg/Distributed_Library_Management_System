@@ -40,20 +40,31 @@ public class BukuController {
 
     // POST Satu
     @PostMapping
-    public Buku create(@RequestBody Buku buku) {
+    public Buku create(@RequestBody Buku buku, jakarta.servlet.http.HttpServletRequest request) {
+        checkPetugasRole(request);
         return service.save(buku);
     }
 
     // PUT Satu (Update by ID)
     @PutMapping("/{id}")
-    public Buku update(@PathVariable Integer id, @RequestBody Buku buku) {
+    public Buku update(@PathVariable Integer id, @RequestBody Buku buku,
+            jakarta.servlet.http.HttpServletRequest request) {
+        checkPetugasRole(request);
         return service.update(id, buku);
     }
 
     // DELETE Satu (Delete by ID)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Integer id, jakarta.servlet.http.HttpServletRequest request) {
+        checkPetugasRole(request);
         service.delete(id);
+    }
+
+    private void checkPetugasRole(jakarta.servlet.http.HttpServletRequest request) {
+        String role = (String) request.getAttribute("userRole");
+        if ("Member".equalsIgnoreCase(role)) {
+            throw new RuntimeException("Akses Ditolak: Hanya Petugas yang boleh mengelola data buku.");
+        }
     }
 
     // ================= BATCH OPERATIONS (LEBIH DARI SATU) =================
@@ -69,7 +80,7 @@ public class BukuController {
     @PutMapping("/batch")
     public List<Buku> updateBatch(@RequestBody List<Buku> listBuku) {
         // saveAll di JPA otomatis melakukan update jika ID sudah ada di DB
-        return service.saveAll(listBuku); 
+        return service.saveAll(listBuku);
     }
 
     // DELETE Banyak (Hapus berdasarkan list ID)

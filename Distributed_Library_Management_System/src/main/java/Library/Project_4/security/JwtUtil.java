@@ -80,17 +80,51 @@ public class JwtUtil {
         }
     }
 
+    public static String getRole(String token) {
+        try {
+            String payload = token.split("\\.")[1];
+            String json = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
+            return extractValue(json, "role");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String getUserId(String token) {
+        try {
+            String payload = token.split("\\.")[1];
+            String json = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
+            return extractValue(json, "userId");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private static long extractExp(String json) {
-        // Very basic extraction, assumed format "exp":12345
-        String search = "\"exp\":";
+        String val = extractValue(json, "exp");
+        return val != null ? Long.parseLong(val) : 0;
+    }
+
+    // Helper to extract string values from simple JSON
+    private static String extractValue(String json, String key) {
+        String search = "\"" + key + "\":";
         int start = json.indexOf(search);
         if (start == -1)
-            return 0;
+            return null;
+
         start += search.length();
-        int end = json.indexOf("}", start);
-        if (end == -1)
-            end = json.length();
-        String num = json.substring(start, end).replaceAll("[^0-9]", "");
-        return Long.parseLong(num);
+
+        // Check if it's a quoted string
+        if (json.charAt(start) == '"') {
+            start++; // skip quote
+            int end = json.indexOf("\"", start);
+            return json.substring(start, end);
+        } else {
+            // It might be a number (like exp)
+            int end = json.indexOf(",", start);
+            if (end == -1)
+                end = json.indexOf("}", start);
+            return json.substring(start, end).trim();
+        }
     }
 }

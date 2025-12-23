@@ -24,6 +24,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             // Validate Token
             if (JwtUtil.validateToken(token)) {
+                String role = JwtUtil.getRole(token);
+                String userId = JwtUtil.getUserId(token);
+
+                request.setAttribute("userRole", role);
+                request.setAttribute("userId", userId);
+
                 return true;
             }
         }

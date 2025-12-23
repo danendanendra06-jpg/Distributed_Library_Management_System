@@ -28,17 +28,28 @@ public class MemberController {
 
     // GET Semua
     @GetMapping
-    public List<Member> list() {
+    public List<Member> list(jakarta.servlet.http.HttpServletRequest request) {
+        String role = (String) request.getAttribute("userRole");
+        if ("Member".equalsIgnoreCase(role)) {
+            // Members should NOT see other members
+            throw new RuntimeException("Akses Ditolak: Member tidak memiliki akses ke daftar anggota.");
+        }
         return service.findAll();
     }
 
     // GET Satu by ID
     @GetMapping("/{id}")
-    public Member get(@PathVariable Integer id) {
+    public Member get(@PathVariable Integer id, jakarta.servlet.http.HttpServletRequest request) {
+        String role = (String) request.getAttribute("userRole");
+        String userId = (String) request.getAttribute("userId");
+
+        if ("Member".equalsIgnoreCase(role) && !userId.equals(String.valueOf(id))) {
+            throw new RuntimeException("Akses Ditolak: Anda hanya boleh melihat profil sendiri.");
+        }
         return service.findById(id);
     }
 
-    // POST Satu
+    // POST Satu (Register usually handled by AuthController, but kept compliant)
     @PostMapping
     public Member create(@RequestBody Member member) {
         return service.save(member);
@@ -46,13 +57,28 @@ public class MemberController {
 
     // PUT Satu (Update by ID)
     @PutMapping("/{id}")
-    public Member update(@PathVariable Integer id, @RequestBody Member member) {
+    public Member update(@PathVariable Integer id, @RequestBody Member member,
+            jakarta.servlet.http.HttpServletRequest request) {
+        String role = (String) request.getAttribute("userRole");
+        String userId = (String) request.getAttribute("userId");
+
+        if ("Member".equalsIgnoreCase(role)) {
+            if (!userId.equals(String.valueOf(id))) {
+                throw new RuntimeException("Akses Ditolak: Anda hanya boleh mengubah data sendiri.");
+            }
+            // Optional: Prevent changing Role or other sensitive fields
+        }
+
         return service.update(id, member);
     }
 
     // DELETE Satu (Delete by ID)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Integer id, jakarta.servlet.http.HttpServletRequest request) {
+        String role = (String) request.getAttribute("userRole");
+        if ("Member".equalsIgnoreCase(role)) {
+            throw new RuntimeException("Akses Ditolak: Member tidak boleh menghapus akun.");
+        }
         service.delete(id);
     }
 
